@@ -17,11 +17,11 @@ function setUp() {
 	createjs.Ticker.addEventListener('tick', running);
 	brick = new createjs.Shape();
 	brick.width = 100;
-	brick.height = 100;
+	brick.height = 300;
 	brick.graphics.beginFill('#d6437c');
 	brick.graphics.drawRect(0, 0, brick.width, brick.height);
-	brick.x = 300;
-	brick.y = 250;
+	brick.x = 100;
+	brick.y = 150;
 	stage.addChild(brick);
 	createPaddle();
 	createBall();
@@ -74,8 +74,8 @@ function createPaddle() {
 
 function createBall() {
 	let ball = new createjs.Shape()
-	ball.radius = ball.height = 20;
-	ball.width = ball.radius * 2;
+	ball.radius = 20;
+	ball.width = ball.height = ball.radius * 2;
 	ball.graphics.beginFill('#da86ef');
 	ball.graphics.drawCircle(0, 0, ball.radius);
 	ball.x = 480;
@@ -107,45 +107,56 @@ function bouncing(target) {
 	let paddleX = paddle.x - paddle.regX;
 	if (paddleX < target.x - target.radius + target.width &&
 		paddleX + paddle.width > target.x - target.radius &&
-		paddle.y < target.y + target.height &&
+		paddle.y < target.y + target.height - target.radius &&
 		paddle.height + paddle.y > target.y) {
 		difference = balls[0].x - paddle.x;
 		target.speedY = -Math.abs(target.speedY);
 		console.log(difference);
-		target.speedX = difference*5/100;
+		target.speedX = difference * 5 / 100;
 
 		bouncedOff++;
 		document.querySelector('p').innerHTML = "Score: " + bouncedOff;
 	}
 	// brick collision
 	if (brick.x < target.x + target.width - target.radius &&
-   brick.x + brick.width > target.x - target.radius &&
-   brick.y < target.y + target.height &&
-   brick.height + brick.y > target.y) {
+		brick.x + brick.width > target.x - target.radius &&
+		brick.y < target.y + target.height - target.radius &&
+		brick.height + brick.y > target.y) {
 		console.log("doin it")
-		let one = target.x -target.radius;
+		let one = target.x - target.radius;
 		let two = brick.x + brick.width;
-		let three = target.x -target.radius + target.width
-		if((target.x -target.radius)>=(brick.x + brick.width) || (target.x -target.radius + target.width)>=brick.x){
-			console.log('left and right');
-			target.speedX*=-1;
-		} 
-			if(target.y-target.radius<brick.y||target.y-target.radius<brick.y+brick.height){
-			target.speedY*=-1;
-			console.log('up and down');
-		}
-//		difference = balls[0].x - paddle.x;
-//		target.speedY = -Math.abs(target.speedY);
-//		console.log(difference);
-//		target.speedX = difference*5/100;
-//
-//		bouncedOff++;
-//		document.querySelector('p').innerHTML = "Score: " + bouncedOff;
+		let three = target.x - target.radius + target.width
+//		if (((target.x - target.radius) >= (brick.x + brick.width))|| ((target.x - target.radius + target.width) <= brick.x)) {
+//			console.log('left and right');
+//			target.speedX *= -1;
+//		}
+//		else if ((target.y - target.radius + target.height) <= brick.y || (target.y - target.radius) <= (brick.y + brick.height)) {
+//			target.speedY *= -1;
+//			console.log('up and down');
+//		}
+		if((target.x -target.radius)>=(brick.x + brick.width -3) || (target.x -target.radius + target.width)<=brick.x-3){
+					console.log('left and right');
+					target.speedX*=-1;
+				} 
+		//			else if(target.y-target.radius<brick.y||target.y-target.radius<brick.y+brick.height){
+		//			target.speedY*=-1;;
+		//			console.log('up and down');
+		//		}
+		//else if(target.y-target.radius<brick.y||target.y-target.radius<brick.y+brick.height)
+		//		difference = balls[0].x - paddle.x;
+		//		target.speedY = -Math.abs(target.speedY);
+		//		console.log(difference);
+		//		target.speedX = difference*5/100;
+		//
+		//		bouncedOff++;
+		//		document.querySelector('p').innerHTML = "Score: " + bouncedOff;
 	}
 }
-function level1(){
-	
+
+function level1() {
+
 }
+
 function running() {
 	stage.update();
 	if (game === 'over') {
